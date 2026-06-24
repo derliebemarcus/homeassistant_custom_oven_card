@@ -1,8 +1,11 @@
 # Home Connect Oven Card
 
-A standalone Home Assistant dashboard card for Home Connect ovens.
+A standalone Home Assistant dashboard card for [Home Connect](https://www.home-assistant.io/integrations/home_connect/) ovens.
 
-![Oven card preview](docs/images/card-preview.png)
+
+<picture>
+  <img src="docs/images/card-preview.png" height="600" alt="Oven card preview" />
+</picture>
 
 ## Features
 
@@ -83,7 +86,7 @@ program_names:
 
 ## Requirements
 
-- Home Assistant with the Home Connect integration configured
+- Home Assistant with the [Home Connect](https://www.home-assistant.io/integrations/home_connect/) integration configured
 - The relevant entities must be enabled in the entity registry
 
 ## Development
