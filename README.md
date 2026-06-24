@@ -2,7 +2,10 @@
 
 A standalone Home Assistant dashboard card for Home Connect ovens.
 
-![Oven card preview](docs/images/card-preview.png)
+
+<picture>
+  <img src="docs/images/card-preview.png" height="600" alt="Oven card preview" />
+</picture>
 
 ## Features
 
