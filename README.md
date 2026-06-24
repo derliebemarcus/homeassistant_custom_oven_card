@@ -18,6 +18,10 @@ A standalone Home Assistant dashboard card for Home Connect ovens.
 
 Direct power-on and remote-start actions are deliberately not provided.
 
+## Compatibility
+
+This card has been tested with a **Siemens iQ700 oven** using the Home Connect integration. It should also work with other Home Connect ovens that expose the corresponding standard entities. Available controls and status fields depend on the capabilities and enabled entities of the individual appliance.
+
 ## Installation
 
 ### HACS
