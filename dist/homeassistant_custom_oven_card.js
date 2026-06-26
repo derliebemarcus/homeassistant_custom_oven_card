@@ -315,7 +315,7 @@ class OvenCard extends HTMLElement {
     temperature?.addEventListener("input", (event) => { const output = this.shadowRoot.getElementById("temperature-value"); if (output) output.value = `${event.target.value} °C`; });
     temperature?.addEventListener("change", (event) => this._service("number", "set_value", { entity_id: this._entities.setpoint, value: Number(event.target.value) }));
     this.shadowRoot.querySelector('[data-action="pause"]')?.addEventListener("click", () => this._service("button", "press", { entity_id: this._entities.pause }));
-    this.shadowRoot.querySelector('[data-action="stop"]')?.addEventListener("click", () => { if (window.confirm(this._text.confirm)) this._service("button", "press", { entity_id: this._entities.stop }); });
+    this.shadowRoot.querySelector('[data-action="stop"]')?.addEventListener("click", () => { if (globalThis.confirm(this._text.confirm)) this._service("button", "press", { entity_id: this._entities.stop }); });
   }
 
   _moreInfo(key) {
@@ -340,14 +340,14 @@ class OvenCard extends HTMLElement {
 }
 
 if (!customElements.get("oven-card")) customElements.define("oven-card", OvenCard);
-window.customCards = window.customCards || [];
+globalThis.customCards = globalThis.customCards || [];
 const matchesEntity = (entity, terms) => {
   const entityId = String(entity?.entity_id || entity || "").toLowerCase();
   const name = String(entity?.attributes?.friendly_name || entity?.name || "").toLowerCase();
   return terms.some((term) => entityId.includes(term) || name.includes(term));
 };
 
-window.customCards.push({
+globalThis.customCards.push({
   type: "oven-card",
   name: "Home Connect Oven Card",
   description: "Home Connect oven control card",
