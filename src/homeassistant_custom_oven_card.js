@@ -341,5 +341,18 @@ class OvenCard extends HTMLElement {
 
 if (!customElements.get("oven-card")) customElements.define("oven-card", OvenCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type: "oven-card", name: "Home Connect Oven Card", description: "Home Connect oven control card", preview: true });
+const matchesEntity = (entity, terms) => {
+  const entityId = String(entity?.entity_id || entity || "").toLowerCase();
+  const name = String(entity?.attributes?.friendly_name || entity?.name || "").toLowerCase();
+  return terms.some((term) => entityId.includes(term) || name.includes(term));
+};
+
+window.customCards.push({
+  type: "oven-card",
+  name: "Home Connect Oven Card",
+  description: "Home Connect oven control card",
+  preview: true,
+  getEntitySuggestion: (entity) =>
+    matchesEntity(entity, ["oven", "backofen", "current_oven_cavity_temperature", "cooking_oven"]),
+});
 console.info(`%c OVEN-CARD %c ${VERSION} `, "color:#fff;background:#f57c00;font-weight:700", "color:#f57c00;background:#fff;font-weight:700");
