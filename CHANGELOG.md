@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.3.0](https://github.com/derliebemarcus/homeassistant_custom_oven_card/compare/v0.2.0...v0.3.0) (2026-06-27)
+
+
+### Features
+
+* add Home Assistant card picker suggestions ([#14](https://github.com/derliebemarcus/homeassistant_custom_oven_card/issues/14)) ([bc5c9e7](https://github.com/derliebemarcus/homeassistant_custom_oven_card/commit/bc5c9e71edd77af8131c28f0f8fb82285abfb01c))
+
 ## [0.2.0](https://github.com/derliebemarcus/homeassistant_custom_oven_card/compare/v0.1.2...v0.2.0) (2026-06-26)
 
 
