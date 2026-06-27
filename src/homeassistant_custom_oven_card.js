@@ -352,7 +352,14 @@ globalThis.customCards.push({
   name: "Home Connect Oven Card",
   description: "Home Connect oven control card",
   preview: true,
-  getEntitySuggestion: (entity) =>
-    matchesEntity(entity, ["oven", "backofen", "current_oven_cavity_temperature", "cooking_oven"]),
+  getEntitySuggestion: (hass, entityId) => {
+    if (!matchesEntity(hass.states?.[entityId], ["oven", "backofen", "current_oven_cavity_temperature", "cooking_oven"])) return null;
+    return {
+      config: {
+        type: "custom:oven-card",
+        entity: entityId,
+      },
+    };
+  },
 });
 console.info(`%c OVEN-CARD %c ${VERSION} `, "color:#fff;background:#f57c00;font-weight:700", "color:#f57c00;background:#fff;font-weight:700");
