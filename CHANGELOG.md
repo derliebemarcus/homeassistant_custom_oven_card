@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.0](https://github.com/derliebemarcus/homeassistant_custom_oven_card/compare/v0.3.0...v0.4.0) (2026-06-27)
+
+
+### Features
+
+* **ci:** add Jenkins card quality gate ([#9](https://github.com/derliebemarcus/homeassistant_custom_oven_card/issues/9)) ([0e5adf6](https://github.com/derliebemarcus/homeassistant_custom_oven_card/commit/0e5adf623fc915486a7a013866f808fce2d9aec9))
+
 ## [0.3.0](https://github.com/derliebemarcus/homeassistant_custom_oven_card/compare/v0.2.0...v0.3.0) (2026-06-27)
 
 
