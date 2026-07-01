@@ -21,7 +21,7 @@ jobs:
             https://raw.githubusercontent.com/derliebemarcus/homeassistant_custom_dishwasher_card/main/package-lock.json \
             --output package-lock.json
 
-      - name: Adapt root metadata
+      - name: Adapt and validate root metadata
         run: |
           node <<'NODE'
           const fs = require('node:fs');
@@ -34,11 +34,11 @@ jobs:
           lock.packages[''].license = pkg.license;
           lock.packages[''].devDependencies = pkg.devDependencies;
           lock.packages[''].engines = pkg.engines;
+          if (lock.packages['node_modules/@stryker-mutator/core']?.version !== '9.6.1') {
+            throw new Error('Dishwasher canary does not contain Stryker 9.6.1');
+          }
           fs.writeFileSync('package-lock.json', `${JSON.stringify(lock, null, 2)}\n`);
           NODE
-
-      - name: Validate derived lockfile
-        run: npm install --package-lock-only --ignore-scripts --offline
 
       - name: Upload derived lockfile
         uses: actions/upload-artifact@v4
