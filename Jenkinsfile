@@ -7,7 +7,7 @@ pipeline {
   }
 
   stages {
-    stage('Bootstrap migration files') {
+    stage('Bootstrap locked files') {
       steps {
         checkout scm
         withCredentials([
@@ -33,48 +33,6 @@ pipeline {
               registry.home.siczb.de/siczb/homeassistant-card-ci:24 \
               bash -lc '
                 set -euo pipefail
-
-                node <<"NODE"
-                const fs = require("node:fs");
-                const packagePath = "package.json";
-                const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf8"));
-                packageJson.scripts.check = packageJson.scripts.check.replace(
-                  "node --check dist/homeassistant_custom_oven_card.js",
-                  "node --check dist/homeassistant_custom_oven_card.js && node --check scripts/sync-version.mjs"
-                );
-                packageJson.scripts["version:sync"] =
-                  "node scripts/sync-version.mjs && npm install --package-lock-only --ignore-scripts && npm run build && node tests/validate.mjs";
-                fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2) + "\\n");
-
-                const validatePath = "tests/validate.mjs";
-                let validate = fs.readFileSync(validatePath, "utf8");
-                validate = validate.replace(
-                  "const releaseManifest = JSON.parse(await readFile(\".release-please-manifest.json\", \"utf8\"));",
-                  "const changesetsConfig = JSON.parse(await readFile(\".changeset/config.json\", \"utf8\"));"
-                );
-                validate = validate.replace(
-                  "assert.equal(releaseManifest[\".\"], packageJson.version, \"Release Please manifest version must match package.json\");",
-                  [
-                    "assert.equal(changesetsConfig.baseBranch, \"main\");",
-                    "assert.equal(changesetsConfig.privatePackages.version, true);",
-                    "assert.equal(changesetsConfig.privatePackages.tag, false);",
-                    "const versionPattern = /const VERSION = \\\"([^\\\"\\n]+)\\\";/;",
-                    "assert.equal(source.match(versionPattern)?.[1], packageJson.version, \"source version must match package.json\");",
-                    "assert.equal(distribution.match(versionPattern)?.[1], packageJson.version, \"dist version must match package.json\");",
-                    "assert.equal(packageJson.engines.node, \">=24\");"
-                  ].join("\\n")
-                );
-                fs.writeFileSync(validatePath, validate);
-                NODE
-
-                cat > .changeset/pipeline-migration.md <<"CHANGESET"
----
-"homeassistant_custom_oven_card": patch
----
-
-Migrate card validation and releases to Jenkins.
-CHANGESET
-
                 npm install --package-lock-only --ignore-scripts \
                   --registry=https://artifacts.home.siczb.de/repository/npm-proxy/
                 node scripts/sync-version.mjs
@@ -82,13 +40,12 @@ CHANGESET
                 node tests/validate.mjs
               '
 
-            git add package.json package-lock.json \
-              scripts/sync-version.mjs tests/validate.mjs \
-              .changeset/ src/homeassistant_custom_oven_card.js \
+            git add package-lock.json \
+              src/homeassistant_custom_oven_card.js \
               dist/homeassistant_custom_oven_card.js
 
             if git diff --cached --quiet; then
-              echo 'Bootstrap files already generated.'
+              echo 'Locked files already generated.'
               exit 0
             fi
 
