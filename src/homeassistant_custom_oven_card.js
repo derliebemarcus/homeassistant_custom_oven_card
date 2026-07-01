@@ -1,4 +1,4 @@
-const VERSION = "0.1.0";
+const VERSION = "0.4.0";
 
 const SUFFIXES = {
   connectivity: "_connectivity",
