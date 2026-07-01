@@ -21,11 +21,15 @@ pipeline {
             set -euo pipefail
             branch='feat/migrate-shared-card-profile-17'
             repository='derliebemarcus/homeassistant_custom_oven_card'
+            image='registry.home.siczb.de/siczb/homeassistant-card-ci:24'
 
             git fetch origin "refs/heads/${branch}:refs/remotes/origin/${branch}"
             git checkout -B "$branch" "origin/$branch"
 
-            node <<'NODE'
+            podman run --rm -i --userns=keep-id \
+              -v "$PWD:/workspace:z" \
+              -w /workspace \
+              "$image" node <<'NODE'
             const fs = require('node:fs');
             const path = 'package.json';
             const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
@@ -36,10 +40,12 @@ pipeline {
             podman run --rm --userns=keep-id \
               -v "$PWD:/workspace:z" \
               -w /workspace \
-              registry.home.siczb.de/siczb/homeassistant-card-ci:24 \
-              npm install --package-lock-only --ignore-scripts
+              "$image" npm install --package-lock-only --ignore-scripts
 
-            node <<'NODE'
+            podman run --rm -i --userns=keep-id \
+              -v "$PWD:/workspace:z" \
+              -w /workspace \
+              "$image" node <<'NODE'
             const fs = require('node:fs');
             const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
             if (lock.packages['node_modules/@stryker-mutator/core']?.version !== '9.6.1') {
