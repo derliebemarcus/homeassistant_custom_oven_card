@@ -1,0 +1,31 @@
+name: Generate Stryker lockfile internally
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: [self-hosted, linux, X64]
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v7
+
+      - name: Generate lockfile in the card CI image
+        run: |
+          podman run --rm --userns=keep-id \
+            -v "$PWD:/workspace:z" \
+            -w /workspace \
+            registry.home.siczb.de/siczb/homeassistant-card-ci:24 \
+            npm install --package-lock-only --ignore-scripts
+
+      - name: Upload lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: stryker-lockfile-internal
+          path: package-lock.json
+          if-no-files-found: error
