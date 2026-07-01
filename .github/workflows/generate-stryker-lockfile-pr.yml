@@ -1,0 +1,31 @@
+name: Generate Stryker lockfile artifact
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Generate lockfile
+        run: npm install --package-lock-only --ignore-scripts --registry=https://artifacts.home.siczb.de/repository/npm-proxy/
+
+      - name: Upload lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: stryker-lockfile-pr
+          path: package-lock.json
+          if-no-files-found: error
