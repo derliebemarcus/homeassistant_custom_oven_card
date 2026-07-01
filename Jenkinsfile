@@ -28,7 +28,7 @@ ciChangesetsRelease(
     mainBranch: 'main',
     repository: [owner: 'derliebemarcus', name: 'homeassistant_custom_oven_card'],
     asset: 'dist/homeassistant_custom_oven_card.js',
-    versionSyncCommand: './scripts/sync-version',
+    versionSyncCommand: 'sh scripts/sync-version',
     credentialId: 'github token',
     autoMergePatch: true,
 )
