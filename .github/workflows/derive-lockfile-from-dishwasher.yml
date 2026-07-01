@@ -1,0 +1,48 @@
+name: Derive lockfile from Dishwasher canary
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  derive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v7
+
+      - name: Download validated canary lockfile
+        run: |
+          curl --fail --location --silent --show-error \
+            https://raw.githubusercontent.com/derliebemarcus/homeassistant_custom_dishwasher_card/main/package-lock.json \
+            --output package-lock.json
+
+      - name: Adapt root metadata
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          lock.name = pkg.name;
+          lock.version = pkg.version;
+          lock.packages[''].name = pkg.name;
+          lock.packages[''].version = pkg.version;
+          lock.packages[''].license = pkg.license;
+          lock.packages[''].devDependencies = pkg.devDependencies;
+          lock.packages[''].engines = pkg.engines;
+          fs.writeFileSync('package-lock.json', `${JSON.stringify(lock, null, 2)}\n`);
+          NODE
+
+      - name: Validate derived lockfile
+        run: npm install --package-lock-only --ignore-scripts --offline
+
+      - name: Upload derived lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: oven-package-lock
+          path: package-lock.json
+          if-no-files-found: error
