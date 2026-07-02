@@ -23,6 +23,8 @@ Direct power-on and remote-start actions are deliberately not provided.
 
 ## Compatibility
 
+This card requires **Home Assistant 2026.7.0 or newer**.
+
 This card has been tested with a **Siemens iQ700 oven** using the Home Connect integration. It should also work with other Home Connect ovens that expose the corresponding standard entities. Available controls and status fields depend on the capabilities and enabled entities of the individual appliance.
 
 ## Installation
@@ -86,7 +88,7 @@ program_names:
 
 ## Requirements
 
-- Home Assistant with the [Home Connect](https://www.home-assistant.io/integrations/home_connect/) integration configured
+- Home Assistant 2026.7.0 or newer with the [Home Connect](https://www.home-assistant.io/integrations/home_connect/) integration configured
 - The relevant entities must be enabled in the entity registry
 
 ## Development
@@ -101,10 +103,10 @@ npm run build
 
 ## Release process
 
-1. Update `CHANGELOG.md` and the version in `package.json`.
-2. Run the Jenkins and GitHub Actions validation pipelines.
-3. Merge the validated version to `main`; the release workflow automatically creates the matching `v<version>` GitHub release and attaches the HACS JavaScript bundle.
-4. Confirm that the HACS validation workflow passes against the release.
+1. Add a `.changeset/*.md` file with an explicit `patch`, `minor` or `major` release level for every release-relevant change.
+2. Merge the change only after Jenkins and the required GitHub-native checks pass.
+3. The next green `main` build creates or updates the Changesets version pull request.
+4. After the version pull request merges, the following green `main` build creates the tag, uploads the JavaScript asset to a draft GitHub Release and publishes the immutable release.
 
 ## Support
 

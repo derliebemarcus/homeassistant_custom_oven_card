@@ -16,9 +16,9 @@ ciHomeAssistantCard(
     mutation: [artifacts: 'reports/mutation/**'],
     sonar: [projectKey: 'homeassistant_custom_oven_card', projectName: 'Home Assistant Custom Oven Card', server: 'SonarQube', timeoutMinutes: 15],
     coveralls: [credentialId: 'Coveralls'],
-    security: [gitleaks: [enabled: true], trivy: [enabled: true], codeql: [enabled: true, toolName: 'codeql', languages: ['javascript-typescript']], osv: [enabled: true], actionlint: [enabled: true]],
+    security: [gitleaks: [enabled: true], trivy: [enabled: true], codeql: [enabled: true, toolName: 'codeql', languages: ['javascript-typescript', 'actions']], osv: [enabled: true], actionlint: [enabled: true]],
     repositoryChecks: [validateScript: 'tests/validate.mjs', lockfileCheck: true],
-    github: [publishStageChecks: true, publishFinalCheck: false, statusContext: 'Continuous Integration / Jenkins', title: 'Oven Card Quality Gates'],
+    github: [credentialId: 'github token', publishStageChecks: true, publishFinalCheck: false, statusContext: 'Continuous Integration / Jenkins', title: 'Oven Card Quality Gates'],
     homeAssistant: [enabled: true],
 )
 
@@ -29,5 +29,6 @@ ciChangesetsRelease(
     repository: [owner: 'derliebemarcus', name: 'homeassistant_custom_oven_card'],
     asset: 'dist/homeassistant_custom_oven_card.js',
     versionSyncCommand: 'npm run version:sync',
+    credentialId: 'github token',
     autoMergePatch: true,
 )
