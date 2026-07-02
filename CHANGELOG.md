@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.2
+
+### Patch Changes
+
+- e51eab7: Require Home Assistant 2026.7.0 and align the Jenkins pipeline with the validated card profile.
+
 ## 0.4.1
 
 ### Patch Changes
