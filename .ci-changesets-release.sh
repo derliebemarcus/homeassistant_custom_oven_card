@@ -5,7 +5,6 @@ required_variables=(
   GH_TOKEN
   CHANGESETS_REPOSITORY
   CHANGESETS_MAIN_BRANCH
-  CHANGESETS_ASSET
   CHANGESETS_PACKAGE_FILE
   CHANGESETS_VERSION
   CHANGESETS_IMAGE
@@ -28,7 +27,9 @@ for command_name in git gh jq podman; do
 done
 
 test -s "$CHANGESETS_PACKAGE_FILE"
-test -s "$CHANGESETS_ASSET"
+if [ -n "${CHANGESETS_ASSET:-}" ]; then
+  test -s "$CHANGESETS_ASSET"
+fi
 test -s .changeset/config.json
 
 repository_url="https://github.com/${CHANGESETS_REPOSITORY}.git"
@@ -77,6 +78,9 @@ release_notes_file() {
 publish_current_version() {
   local tag="v${current_version}"
   local tag_sha=""
+  local release_is_draft=""
+  local asset_name=""
+  local asset_present="false"
 
   if git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null 2>&1; then
     git fetch --force origin "refs/tags/${tag}:refs/tags/${tag}"
@@ -109,25 +113,35 @@ publish_current_version() {
       --json isDraft \
       --jq '.isDraft'
   )"
-  asset_name="$(basename "$CHANGESETS_ASSET")"
-  asset_present="$(
-    gh release view "$tag" \
-      --repo "$CHANGESETS_REPOSITORY" \
-      --json assets |
-      jq -r --arg name "$asset_name" '[.assets[].name == $name] | any'
-  )"
+
+  if [ -n "${CHANGESETS_ASSET:-}" ]; then
+    asset_name="$(basename "$CHANGESETS_ASSET")"
+    asset_present="$(
+      gh release view "$tag" \
+        --repo "$CHANGESETS_REPOSITORY" \
+        --json assets |
+        jq -r --arg name "$asset_name" '[.assets[].name == $name] | any'
+    )"
+  fi
 
   if [ "$release_is_draft" = "true" ]; then
-    gh release upload "$tag" \
-      "$CHANGESETS_ASSET" \
-      --repo "$CHANGESETS_REPOSITORY" \
-      --clobber
+    if [ -n "${CHANGESETS_ASSET:-}" ]; then
+      gh release upload "$tag" \
+        "$CHANGESETS_ASSET" \
+        --repo "$CHANGESETS_REPOSITORY" \
+        --clobber
+    fi
     gh release edit "$tag" \
       --repo "$CHANGESETS_REPOSITORY" \
       --draft=false
     gh release view "$tag" \
       --repo "$CHANGESETS_REPOSITORY" \
       --json tagName,url,isDraft,assets
+    return
+  fi
+
+  if [ -z "${CHANGESETS_ASSET:-}" ]; then
+    echo "Release ${tag} is already published; no release asset is configured."
     return
   fi
 
@@ -185,9 +199,9 @@ create_or_update_version_pr() {
 
 - consume pending Changesets
 - update the package version to \`${new_version}\`
-- update the changelog, lockfile and generated card asset
+- update the changelog and repository-specific version sources
 
-After this PR is merged and the Jenkins main build passes, Jenkins creates tag \`v${new_version}\`, uploads the card asset to a draft GitHub Release and publishes the immutable release.
+After this PR is merged and the Jenkins main build passes, Jenkins creates tag \`v${new_version}\`, creates a draft GitHub Release, uploads any configured release asset and publishes the immutable release only after its contents are complete.
 EOF
 )"
 
