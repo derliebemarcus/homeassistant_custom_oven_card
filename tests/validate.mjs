@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 
 const source = await readFile("src/homeassistant_custom_oven_card.js", "utf8");
 const distribution = await readFile("dist/homeassistant_custom_oven_card.js", "utf8");
+const readme = await readFile("README.md", "utf8");
 const manifest = JSON.parse(await readFile("hacs.json", "utf8"));
 const packageJson = JSON.parse(await readFile("package.json", "utf8"));
 const packageLock = JSON.parse(await readFile("package-lock.json", "utf8"));
@@ -15,6 +16,7 @@ assert.equal(manifest.name, "Home Connect Oven Card");
 assert.equal(manifest.filename, "homeassistant_custom_oven_card.js");
 assert.equal(manifest.homeassistant, supportedHomeAssistant);
 assert.match(manifest.homeassistant, /^\d{4}\.\d{1,2}\.0$/);
+assert.ok(readme.includes("Home Assistant " + supportedHomeAssistant + " or newer"));
 assert.match(packageJson.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
 assert.equal(packageLock.version, packageJson.version);
 assert.equal(packageLock.packages[""].version, packageJson.version);
