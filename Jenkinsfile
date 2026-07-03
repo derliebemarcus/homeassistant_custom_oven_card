@@ -1,5 +1,6 @@
 @Library('jenkins-shared-library@main') _
 
+// Classify documentation-only changes before any pipeline profile starts.
 if (ciDocumentationOnlyShortcut(
     scm: scm,
     agentLabel: 'klymene',
