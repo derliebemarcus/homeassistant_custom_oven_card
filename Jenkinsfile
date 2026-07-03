@@ -1,5 +1,21 @@
 @Library('jenkins-shared-library@main') _
 
+if (ciDocumentationOnlyShortcut(
+    scm: scm,
+    agentLabel: 'klymene',
+    repository: [
+        owner: 'derliebemarcus',
+        name: 'homeassistant_custom_oven_card',
+    ],
+    github: [
+        credentialId: 'github token',
+        statusContext: 'Continuous Integration / Jenkins',
+        title: 'Oven Card Quality Gates',
+    ],
+)) {
+    return
+}
+
 ciHomeAssistantCard(
     scm: scm,
     agentLabel: 'klymene',
