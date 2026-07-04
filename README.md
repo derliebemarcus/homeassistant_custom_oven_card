@@ -115,3 +115,7 @@ Use GitHub Issues for bug reports and feature requests. Security issues should f
 ## License
 
 MIT
+
+## Detailed documentation
+
+Architecture, development, compatibility, and operations for Home Connect Oven Card are documented in [docs/index.md](docs/index.md).
