@@ -354,10 +354,12 @@ globalThis.customCards.push({
   preview: true,
   getEntitySuggestion: (hass, entityId) => {
     if (!matchesEntity(hass.states?.[entityId], ["oven", "backofen", "current_oven_cavity_temperature", "cooking_oven"])) return null;
+    const device_id = hass.entities?.[entityId]?.device_id;
+    if (!device_id) return null;
     return {
       config: {
         type: "custom:oven-card",
-        entity: entityId,
+        device_id,
       },
     };
   },
