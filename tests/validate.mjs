@@ -52,6 +52,8 @@ for (const expected of [
   'prefers-reduced-motion',
   'getEntitySuggestion',
   'globalThis.customCards',
+  'hass.entities',
+  'device_id',
 ]) {
   assert.ok(source.includes(expected), `missing required feature: ${expected}`);
 }
