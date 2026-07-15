@@ -17,3 +17,5 @@ language; workflow syntax is covered by Actionlint instead of CodeQL's GitHub Ac
 
 Release metadata and final CI status are published to `siczb/homeassistant_custom_oven_card` through
 the Forgejo API. GitHub remains a downstream mirror and is not used as the Jenkins SCM provider.
+
+A successful protected `main` build is the final acceptance check after the migration PR is merged.
