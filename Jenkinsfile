@@ -3,6 +3,11 @@
 ciRepositoryDocumentationContract(
     scm: scm,
     agentLabel: 'klymene',
+    repository: [
+        provider: 'forgejo',
+        owner: 'siczb',
+        name: 'homeassistant_custom_oven_card',
+    ],
 )
 
 // Classify documentation-only changes before any pipeline profile starts.
