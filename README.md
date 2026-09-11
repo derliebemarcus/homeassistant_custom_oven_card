@@ -31,6 +31,8 @@ This card has been tested with a **Siemens iQ700 oven** using the Home Connect i
 
 ### HACS
 
+[![Open your Home Assistant instance and open this repository in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=derliebemarcus&repository=homeassistant_custom_oven_card&category=plugin)
+
 1. Open HACS.
 2. Add this repository as a custom repository with category **Dashboard**.
 3. Install **Home Connect Oven Card**.
