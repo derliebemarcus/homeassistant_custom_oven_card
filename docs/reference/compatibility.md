@@ -11,3 +11,10 @@ current dependency audit. These internal maintenance updates require no Home Ass
 configuration changes.
 
 Breaking compatibility changes require an explicit major release or migration note.
+
+## Home Assistant 2026.11 qualification
+
+Card suggestions no longer read the deprecated `friendly_name` state attribute and
+use device/entity registry metadata with fallback to entity IDs. Unit tests cover
+missing `friendly_name` and unavailable registry entries. Full browser validation
+against the actual Home Assistant 2026.11 frontend remains required before release.
